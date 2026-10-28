@@ -1,0 +1,27 @@
+name: chat-widget
+region: nyc
+services:
+  - name: embed
+    github:
+      repo: joselazo21/chat-bot
+      branch: main
+      deploy_on_push: true
+    source_dir: /
+    environment_slug: node-js
+    build_command: pnpm build
+    run_command: pnpm --filter @widget/embed start
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-0.5gb
+    health_check:
+      http_path: /
+    envs:
+      - key: WIDGET_API_BASE
+        scope: BUILD_TIME
+        value: https://web-production-c4c6e.up.railway.app
+      - key: WIDGET_FRAME_ANCESTORS
+        scope: RUN_AND_BUILD_TIME
+        value: "*"
+      - key: ENABLE_DEMO
+        scope: RUN_AND_BUILD_TIME
+        value: "false"
